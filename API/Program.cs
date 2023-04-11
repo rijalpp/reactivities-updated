@@ -14,6 +14,14 @@ builder.Services.AddDbContext<DataContext>(opt =>
   opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddCors(opt => {
+  opt.AddPolicy("CorsPolicy", policy =>
+  {
+    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+  });
+
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
-
+app.UseCors("CorsPolicy"); // It is important to put UseCors before UseAuthorization, otherwise,it won't even go to backend to authorize because of cors policy.
 app.UseAuthorization();
 
 app.MapControllers();
