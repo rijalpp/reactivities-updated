@@ -15,16 +15,18 @@ interface Props {
     closeForm: () => void;
     createOrEdit: (activity: Activity) => void;
     deleteActivity: (id: string) => void;
+    submitting: boolean;
 }
 export default function ActivityDashboard({activities, selectedActivity, deleteActivity,
-     selectActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit}: Props) {
+     selectActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, submitting}: Props) {
   //semantic-ui-react Grid.Column has 16 columns unlike bootstrap which as 12 columns.
   return (
     <Grid>
       <Grid.Column width="10">
         <ActivityList activities={activities}
          selectActivity={selectActivity}
-         deleteActivity={deleteActivity}/>
+         deleteActivity={deleteActivity}
+         submitting={submitting}/>
       </Grid.Column>
       <Grid.Column width={6}>
         {selectedActivity && !editMode &&
@@ -35,7 +37,11 @@ export default function ActivityDashboard({activities, selectedActivity, deleteA
         />
         }
         {editMode &&
-        <ActivityForm activity={selectedActivity} closeForm={closeForm} createOrEdit={createOrEdit}  />}
+        <ActivityForm
+          activity={selectedActivity}
+           closeForm={closeForm}
+            createOrEdit={createOrEdit}
+            submitting={submitting}  />}
       </Grid.Column>
     </Grid>
   );
