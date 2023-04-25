@@ -5,22 +5,24 @@ import ActivityDashboard from "../../features/activities/dashboard/ActivityDashb
 import LoadingComponent from "./LoadingComponent";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
+import { Outlet, useLocation } from "react-router-dom";
+import Homepage from "../../features/home/HomePage";
 
 function App() {
-  const {activityStore} = useStore();
-
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]); //passing activityStore as the dependency to useEffect. 
-
-  if (activityStore.loadingInitial) return <LoadingComponent content='Loading app' inverted={false} />
+  const location = useLocation();
 
   return (
     <>
-      <NavBar />
-      <Container style={{ marginTop: "7em" }}>
-        <ActivityDashboard />
-      </Container>
+      {location.pathname === "/" ? (
+        <Homepage />
+      ) : (
+        <>
+          <NavBar />
+          <Container style={{ marginTop: "7em" }}>
+            <Outlet />
+          </Container>
+        </>
+      )}
     </>
   );
 }
